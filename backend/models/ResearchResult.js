@@ -21,7 +21,7 @@ const ResearchResultSchema = new mongoose.Schema({
     ref: 'Deck'
   },
   createdAt: {
-    type: Date,
+    type: Date,         
     default: Date.now
   }
 });

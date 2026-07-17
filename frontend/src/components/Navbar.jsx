@@ -7,21 +7,12 @@ export default function Navbar({ onMenuToggle, activeTab }) {
         return 'FlashCards'
       case 'research':
         return 'AI Research Assistant'
+      case 'quiz':
+        return 'Quiz Generator'
       case 'settings':
         return 'Workspace Settings'
       default:
         return 'Dashboard'
-    }
-  }
-
-  const getSearchPlaceholder = () => {
-    switch (activeTab) {
-      case 'flashcards':
-        return 'Search decks, cards, or notes...'
-      case 'research':
-        return 'Search knowledge base...'
-      default:
-        return 'Search anything...'
     }
   }
 
@@ -40,22 +31,10 @@ export default function Navbar({ onMenuToggle, activeTab }) {
 
         {/* Breadcrumbs or Dashboard Title */}
         <div className="flex items-center gap-2">
-          <span className="font-label-sm text-[10px] text-on-surface-variant uppercase tracking-wider hidden sm:inline">Lumina AI</span>
+          <span className="font-label-sm text-[10px] text-on-surface-variant uppercase tracking-wider hidden sm:inline">Stud Bud.AI</span>
           <span className="text-on-surface-variant/40 hidden sm:inline text-xs">/</span>
           <span className="font-label-md text-label-md font-semibold text-on-surface">{getBreadcrumbs()}</span>
         </div>
-      </div>
-
-      {/* Middle: Search Bar (Hidden on Mobile) */}
-      <div className="hidden md:flex items-center flex-grow max-w-md mx-6 relative">
-        <span className="material-symbols-outlined absolute left-3 text-on-surface-variant text-[20px] pointer-events-none">
-          search
-        </span>
-        <input 
-          className="w-full bg-surface-container-high/50 border border-white/10 rounded-lg pl-10 pr-4 py-2 font-body-md text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent transition-all backdrop-blur-md" 
-          placeholder={getSearchPlaceholder()} 
-          type="text"
-        />
       </div>
 
       {/* Right side: Actions & Profile */}

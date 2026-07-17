@@ -28,6 +28,10 @@ app.use('/api', flashCardRouter);
 const researchResultRouter = require('./routes/researchResultRoutes');
 app.use('/api/research-results', researchResultRouter);
 
+// Quiz Routes
+const quizRouter = require('./routes/quiz.routes');
+app.use('/api/quiz', quizRouter);
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

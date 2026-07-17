@@ -2,12 +2,33 @@ import React, { useState, useRef, useEffect } from 'react'
 import api from '../services/api'
 
 function generateQAsFromContent(topic, content) {
-  // Clean content by removing markdown markup
+  // 1. Try to parse AI-generated Q&A cards if the delimiter is present
+  const parts = content.split('---FLASHCARDS---')
+  if (parts.length > 1) {
+    const flashcardsText = parts[1].trim()
+    const cards = []
+    const lines = flashcardsText.split('\n').map(l => l.trim()).filter(l => l.length > 0)
+    
+    let currentCard = {}
+    for (const line of lines) {
+      if (line.startsWith('Q:')) {
+        currentCard.question = line.replace(/^Q:\s*/i, '').trim()
+      } else if (line.startsWith('A:')) {
+        currentCard.answer = line.replace(/^A:\s*/i, '').trim()
+        if (currentCard.question && currentCard.answer) {
+          cards.push(currentCard)
+          currentCard = {}
+        }
+      }
+    }
+    if (cards.length > 0) {
+      return cards
+    }
+  }
+
+  // 2. Fallback to sentence parsing if no delimiter was returned
   const cleanText = content.replace(/[#*`]/g, '').trim()
-  
-  // Split content by sentences
   const sentences = cleanText.split(/[.!?]+/).map(s => s.trim()).filter(s => s.length > 25)
-  
   const cards = []
   
   // Card 1: Core Theme
@@ -55,7 +76,7 @@ function generateQAsFromContent(topic, content) {
     })
   }
 
-  return cards.slice(0, 4) // Return maximum of 4 cards
+  return cards.slice(0, 4)
 }
 
 export default function ResearchAssistantView() {
@@ -71,7 +92,7 @@ export default function ResearchAssistantView() {
     {
       id: 1,
       sender: 'assistant',
-      text: "I've connected to the Lumina AI orchestrator workspace. Enter a research topic using 'Add Source' to start the research agents, or ask me any question directly.",
+      text: "I've connected to the Stud Bud.AI orchestrator workspace. Enter a research topic using 'Add Source' to start the research agents, or ask me any question directly.",
       time: '11:20 AM'
     }
   ])
@@ -97,7 +118,7 @@ export default function ResearchAssistantView() {
         title: item.topic,
         year: new Date(item.createdAt).getFullYear(),
         citations: Math.floor(Math.random() * 90) + 10,
-        authors: 'Lumina AI Synthesis',
+        authors: 'Stud Bud.AI Synthesis',
         status: 'Analyzed',
         content: item.content
       }))
@@ -182,7 +203,7 @@ export default function ResearchAssistantView() {
           title: savedResult.topic,
           year: new Date(savedResult.createdAt).getFullYear(),
           citations: 12,
-          authors: 'Lumina AI Synthesis',
+          authors: 'Stud Bud.AI Synthesis',
           status: 'Analyzed',
           content: savedResult.content
         })
@@ -351,7 +372,7 @@ export default function ResearchAssistantView() {
           
           <p className="text-body-md text-on-surface-variant mb-6 leading-relaxed relative z-10 max-h-48 overflow-y-auto pr-2">
             {selectedSource ? (
-              <span className="whitespace-pre-line">{selectedSource.content}</span>
+              <span className="whitespace-pre-line">{selectedSource.content.split('---FLASHCARDS---')[0].trim()}</span>
             ) : (
               <span>No sources available. Click "Add Source" to run AI research agents and generate executive syntheses.</span>
             )}
@@ -493,7 +514,7 @@ export default function ResearchAssistantView() {
                     <div className="w-6 h-6 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center">
                       <span className="material-symbols-outlined text-[14px]">smart_toy</span>
                     </div>
-                    <span className="text-xs font-medium text-on-surface-variant">Lumina AI</span>
+                    <span className="text-xs font-medium text-on-surface-variant">Stud Bud.AI</span>
                   </>
                 ) : (
                   <span className="text-xs font-medium text-on-surface-variant ml-auto">You</span>
@@ -535,7 +556,7 @@ export default function ResearchAssistantView() {
                 <div className="w-6 h-6 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center">
                   <span className="material-symbols-outlined text-[14px]">smart_toy</span>
                 </div>
-                <span className="text-xs font-medium text-on-surface-variant">Lumina AI</span>
+                <span className="text-xs font-medium text-on-surface-variant">Stud Bud.AI</span>
               </div>
               <div className="bg-surface-container-low border border-white/10 rounded-2xl rounded-tl-sm p-3 flex items-center gap-1.5 shadow-sm">
                 <span className="w-2 h-2 rounded-full bg-on-surface-variant/40 animate-bounce" style={{ animationDelay: '0ms' }}></span>
@@ -585,7 +606,7 @@ export default function ResearchAssistantView() {
             </button>
           </div>
           <div className="flex justify-between items-center mt-2 px-1 text-[10px] text-on-surface-variant uppercase tracking-wider font-semibold">
-            <span>Lumina AI Model V4</span>
+            <span>Stud Bud.AI Model V4</span>
             <button 
               type="button"
               onClick={() => setMessages(messages.slice(0, 1))}

@@ -17,10 +17,7 @@ export default function FlashCardsView() {
   const [newDeckName, setNewDeckName] = useState('')
   const [isCreatingDeck, setIsCreatingDeck] = useState(false)
 
-  // Daily goals state
-  const [dailyProgress, setDailyProgress] = useState(12)
-  const dailyGoal = 30
-  const streak = 14
+
 
   // Fetch decks & their cards on mount
   const fetchDecks = async () => {
@@ -135,7 +132,6 @@ export default function FlashCardsView() {
   const handleCardFeedback = (gotIt) => {
     if (gotIt) {
       setSessionSuccessCount(prev => prev + 1)
-      setDailyProgress(prev => Math.min(prev + 1, dailyGoal))
     }
     
     if (currentCardIndex + 1 < studyDeck.cards.length) {
@@ -146,11 +142,6 @@ export default function FlashCardsView() {
       setCurrentCardIndex(studyDeck.cards.length) // trigger complete screen
     }
   }
-
-  // Circular progress calculations
-  const radius = 50
-  const circumference = 2 * Math.PI * radius
-  const strokeDashoffset = circumference - (dailyProgress / dailyGoal) * circumference
 
   return (
     <div className="flex-1 flex flex-col lg:flex-row gap-8 items-start w-full">
@@ -235,12 +226,6 @@ export default function FlashCardsView() {
                   </div>
 
                   <div className="flex items-center gap-2">
-                    {deck.isDue && (
-                      <span className="px-2 py-1 rounded-md bg-rose-500/20 text-rose-300 font-label-sm text-[11px] flex items-center gap-1 border border-rose-500/30">
-                        <span className="material-symbols-outlined text-[14px]">warning</span>
-                        <span>{deck.dueCount} Due</span>
-                      </span>
-                    )}
                     <button 
                       onClick={(e) => handleDeleteDeck(deck.id, e)}
                       className="text-on-surface-variant hover:text-red-400 p-2 rounded-md hover:bg-white/5 transition-colors"
@@ -267,25 +252,6 @@ export default function FlashCardsView() {
                   </div>
                   <div className="w-1 h-1 rounded-full bg-white/20"></div>
                   <div>Last studied: {deck.lastStudied}</div>
-                </div>
-
-                {/* Progress Mastery Bar */}
-                <div className="mt-2 relative z-10">
-                  <div className="flex justify-between text-label-sm mb-2">
-                    <span className="text-on-surface-variant">Mastery</span>
-                    <span className={`${deck.isDue ? 'text-rose-400' : 'text-primary'} font-bold`}>
-                      {deck.mastery}%
-                    </span>
-                  </div>
-                  <div className="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
-                    <div 
-                      className={`h-full rounded-full relative transition-all duration-500
-                        ${deck.isDue ? 'bg-rose-400' : 'bg-primary'}`}
-                      style={{ width: `${deck.mastery}%` }}
-                    >
-                      <div className="absolute inset-0 bg-white/20"></div>
-                    </div>
-                  </div>
                 </div>
 
                 {/* Actions */}
@@ -330,57 +296,6 @@ export default function FlashCardsView() {
 
       {/* Widgets (Right Column) */}
       <aside className="w-full lg:w-80 flex flex-col gap-6 shrink-0">
-        {/* Daily Goal Widget */}
-        <div className="bg-white/[0.03] backdrop-blur-[20px] border border-white/10 border-t-white/20 rounded-2xl p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-headline-md font-bold text-on-surface">Daily Goal</h3>
-            <span className="material-symbols-outlined text-tertiary">local_fire_department</span>
-          </div>
-
-          <div className="flex flex-col items-center justify-center mb-6 relative">
-            {/* SVG Circular Progress */}
-            <div className="w-32 h-32 flex items-center justify-center relative">
-              <svg className="w-full h-full transform -rotate-90">
-                <circle 
-                  cx="64" 
-                  cy="64" 
-                  r="50" 
-                  className="stroke-surface-container-high fill-none"
-                  strokeWidth="8"
-                />
-                <circle 
-                  cx="64" 
-                  cy="64" 
-                  r="50" 
-                  className="stroke-tertiary fill-none transition-all duration-500"
-                  strokeWidth="8"
-                  strokeDasharray={circumference}
-                  strokeDashoffset={strokeDashoffset}
-                  strokeLinecap="round"
-                />
-              </svg>
-              <div className="absolute text-center flex flex-col items-center">
-                <span className="text-headline-lg font-bold text-on-surface">{dailyProgress}</span>
-                <span className="text-label-sm text-on-surface-variant -mt-1">/ {dailyGoal} cards</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4 text-center border-t border-white/5 pt-4">
-            <div>
-              <div className="text-headline-md font-bold text-on-surface">{streak}</div>
-              <div className="text-label-sm text-on-surface-variant">Day Streak</div>
-            </div>
-            <div>
-              <div className="text-headline-md font-bold text-on-surface">{Math.max(0, dailyGoal - dailyProgress)}</div>
-              <div className="text-label-sm text-on-surface-variant">To Review</div>
-            </div>
-          </div>
-
-          <button className="w-full mt-6 bg-white/5 hover:bg-white/10 text-on-surface border border-white/10 font-label-md text-sm py-2.5 rounded-lg transition-colors">
-            Adjust Goal
-          </button>
-        </div>
 
         {/* Recent Activity Widget */}
         <div className="bg-white/[0.03] backdrop-blur-[20px] border border-white/10 border-t-white/20 rounded-2xl p-6">

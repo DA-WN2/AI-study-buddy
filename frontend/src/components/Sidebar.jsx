@@ -3,7 +3,8 @@ import React from 'react'
 export default function Sidebar({ activeTab, setActiveTab, isMobileMenuOpen, setIsMobileMenuOpen }) {
   const navItems = [
     { id: 'flashcards', label: 'FlashCards', icon: 'amp_stories' },
-    { id: 'research', label: 'AI Research Assistant', icon: 'psychology' }
+    { id: 'research', label: 'AI Research Assistant', icon: 'psychology' },
+    { id: 'quiz', label: 'Quiz Generator', icon: 'quiz' }
   ]
 
   const handleTabClick = (tabId) => {
@@ -32,8 +33,8 @@ export default function Sidebar({ activeTab, setActiveTab, isMobileMenuOpen, set
               </span>
             </div>
             <div>
-              <h1 className="text-primary text-headline-md font-bold leading-normal tracking-tight">Lumina AI</h1>
-              <p className="text-on-surface-variant text-[10px] uppercase tracking-wider font-semibold">Intelligence Workspace</p>
+              <h1 className="text-primary text-headline-md font-bold leading-normal tracking-tight">Stud Bud.AI</h1>
+              <p className="text-on-surface-variant text-[10px] uppercase tracking-wider font-semibold">Your AI Study Companion</p>
             </div>
           </div>
 

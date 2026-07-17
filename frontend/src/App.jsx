@@ -4,6 +4,7 @@ import Navbar from './components/Navbar'
 import DashboardHome from './views/DashboardHome'
 import FlashCardsView from './views/FlashCardsView'
 import ResearchAssistantView from './views/ResearchAssistantView'
+import QuizGeneratorView from './views/QuizGeneratorView'
 import './App.css'
 
 function App() {
@@ -18,6 +19,8 @@ function App() {
         return <FlashCardsView />
       case 'research':
         return <ResearchAssistantView />
+      case 'quiz':
+        return <QuizGeneratorView />
       case 'settings':
         return (
           <div className="flex-grow flex flex-col gap-6">
@@ -30,7 +33,7 @@ function App() {
                   <div className="flex justify-between items-center bg-surface-container-low p-4 rounded-xl border border-white/5">
                     <div>
                       <div className="text-label-md font-semibold text-on-surface">Default Synthesis Model</div>
-                      <div className="text-xs text-on-surface-variant">Lumina AI Model V4 (Default)</div>
+                      <div className="text-xs text-on-surface-variant">Stud Bud.AI Model V4 (Default)</div>
                     </div>
                     <button className="px-4 py-2 bg-primary-container/20 text-primary border border-primary/30 rounded-lg text-xs font-semibold hover:bg-primary-container/30 transition-all">
                       Configure
